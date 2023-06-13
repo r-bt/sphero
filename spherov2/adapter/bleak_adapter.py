@@ -3,13 +3,13 @@ from bleak import BleakScanner, BleakClient
 
 class BleakAdapter(BleakClient):
     @staticmethod
-    async def scan_toys(timeout: float = 5.0):
-        return await BleakScanner.discover(timeout)
+    async def scan_toys(timeout: float = 5.0, bleak_adapter=None):
+        return await BleakScanner.discover(timeout, adapter=bleak_adapter)
 
     @staticmethod
-    async def scan_toy(name: str, timeout: float = 5.0):
+    async def scan_toy(name: str, timeout: float = 5.0, bleak_adapter=None):
         return await BleakScanner.find_device_by_filter(
-                lambda _, a: a.local_name == name, timeout)
+                lambda _, a: a.local_name == name, timeout, adapter=bleak_adapter)
     
     async def write(self, uuid, data):
         await self.write_gatt_char(uuid, bytearray(data), True)

@@ -27,7 +27,7 @@ def all_toys(cls=Toy):
 
 
 async def find_toys(*, timeout=5.0, toy_types: Iterable[Type[Toy]] = None,
-              toy_names: Iterable[str] = None, adapter=None) -> List[Toy]:
+              toy_names: Iterable[str] = None, adapter=None, bleak_adapter=None) -> List[Toy]:
     """Find toys that matches the criteria given.
 
     :param timeout: Device scanning timeout, in seconds.
@@ -37,6 +37,7 @@ async def find_toys(*, timeout=5.0, toy_types: Iterable[Type[Toy]] = None,
                       kinds of names.
     :param adapter: Kind of adapter to use for scanning bluetooth devices. Set to ``None`` to use default
                     :class:`BleakAdapter`.
+    :param bleak_adapter Bluetooth adapter Bleak should use
     :return: A list of toys that are scanned.
     """
     if adapter is None:
@@ -45,12 +46,12 @@ async def find_toys(*, timeout=5.0, toy_types: Iterable[Type[Toy]] = None,
     if toy_names is not None:
         toy_names = set(toy_names)
     if toy_names is not None and len(toy_names) == 1:
-        toy = await adapter.scan_toy(list(toy_names)[0], timeout)
+        toy = await adapter.scan_toy(list(toy_names)[0], timeout, bleak_adapter=bleak_adapter)
         if toy is None:
             return []
         toys = [toy]
     else:
-        toys = await adapter.scan_toys(timeout)
+        toys = await adapter.scan_toys(timeout, bleak_adapter=bleak_adapter)
     if toy_types is None:
         toy_types = set(all_toys())
     ret = []
