@@ -76,6 +76,13 @@ with SpheroEduAPI(toy) as api:
     api.spin(360, 1)
 ```
 
+## Comparison to other libraries
+
+| Name     | 
+|----------|
+| [SpheroV2](https://github.com/artificial-intelligence-class/spherov2.py) |
+| [SpheroNav](https://github.com/Tordensky/SpheroNav) |
+
 ## Acknowledgments
 
 This library is made for educational purposes.  It is used by students in [CIS 521 - Artificial Intelligence](http://artificial-intelligence-class.org/) at the University of Pennsylvania, where we use Sphero robots to help teach the foundations of AI.
