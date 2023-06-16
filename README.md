@@ -1,8 +1,10 @@
 # Sphero
 
-![Read the Docs](https://img.shields.io/readthedocs/sphero?style=for-the-badge) ![GitHub last commit](https://img.shields.io/github/last-commit/r-bt/sphero?style=for-the-badge)
+![Read the Docs](https://img.shields.io/readthedocs/sphero?style=for-the-badge) ![GitHub last commit](https://img.shields.io/github/last-commit/r-bt/sphero?style=for-the-badge) [![All Contributors](https://img.shields.io/github/all-contributors/r-bt/sphero?color=ee8449&style=for-the-badge)](#contributors)
 
 Sphero is a python library for controlling [Sphero](https://sphero.com/) toys. It implements the Sphero Version 2 [BLE API](https://sdk.sphero.com/docs/api_spec/general_api/) and utilizes python's new `asyncio` features to provide idiomatic ways of discovering, controlling and reading data from a variety of Sphero toys.
+
+Sphero is a fork of the wonderful [spherov2 library](https://github.com/artificial-intelligence-class/spherov2.py). It implements an `async` API by centering bleak [bleak](https://github.com/hbldh/bleak) (a BLE library) to provide a performant, cross-platform, and multi-agent API
 
 ## Currently supported toys
 
@@ -83,7 +85,13 @@ This library is made for educational purposes.  It is used by students in [CIS 5
 
 It is published as an open-source library under the [MIT License](LICENSE).
 
-## Authors
+## Contributors
 
-* **Hanbang Wang** - [https://www.cis.upenn.edu/~hanbangw/](https://www.cis.upenn.edu/~hanbangw/)
-* **Elionardo Feliciano**
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
