@@ -57,7 +57,8 @@ class Packet(NamedTuple):
         target_unavailable = 0x0a
 
     @staticmethod
-    def parse_response(data) -> 'Packet':
+    def parse_response(data, name) -> 'Packet':
+        passed_data = data
         sop, *data, eop = data
         if sop != Packet.Encoding.start:
             raise PacketDecodingException('Unexpected start of packet')
@@ -65,7 +66,25 @@ class Packet(NamedTuple):
             raise PacketDecodingException('Unexpected end of packet')
         *data, chk = Packet.__unescape_data(data)
         if packet_chk(data) != chk:
+            with open("{name}.txt".format(name=name), "a") as file:
+                file.write("#####CHECKSUM ERROR#####")
+                file.write("\n")
+                file.write(','.join(format(x, '02x') for x in passed_data))
+                file.write("\n")
+                file.write("#####END CHECKSUM ERROR#####")
+                file.write("\n")
+            with open("{name}-checksum.txt".format(name=name), "a") as file:
+                file.write("#####CHECKSUM ERROR#####\n")
             raise PacketDecodingException('Bad response checksum')
+        else:
+            with open("{name}.txt".format(name=name), "a") as file:
+                file.write("#####PACKET#####")
+                file.write("\n")
+                file.write(','.join(format(x, '02x') for x in passed_data))
+                file.write("\n")
+                file.write("#####END PACKET#####")
+                file.write("\n")
+
 
         flags = data.pop(0)
 
@@ -160,20 +179,30 @@ class Packet(NamedTuple):
             return packet
 
     class Collector:
-        def __init__(self, callback):
+        def __init__(self, callback, name):
             self.__callback = callback
+            self.__name = name
             self.__data = []
 
         def add(self, data):
+            with open("packets.txt", "a") as file:
+                file.write(','.join(format(x, '02x') for x in data))
+                file.write("\n")
             for b in data:
+                if b == Packet.Encoding.start and len(self.__data) > 0:
+                    self.__data = []
+                    print("Unexcepted Packet Start Byte")
                 self.__data.append(b)
                 if b == Packet.Encoding.end:
                     pkt = self.__data
+                    with open("packets.txt", "a") as file:
+                        file.write("PACKET: ")
+                        file.write(','.join(format(x, '02x') for x in pkt))
+                        file.write("\n")
                     self.__data = []
                     if len(pkt) < 6:
                         raise PacketDecodingException(f'Very small packet {[hex(x) for x in pkt]}')
-                    asyncio.ensure_future(self.__callback(Packet.parse_response(pkt)))
-
+                    asyncio.ensure_future(self.__callback(Packet.parse_response(pkt, self.__name)))
 
 class AnimationControl:
     def __init__(self, toy):

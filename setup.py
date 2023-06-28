@@ -26,5 +26,5 @@ setup(
     ],
     keywords='robotics Sphero toy bluetooth ble',
     python_requires='>=3.7',
-    install_requires=['numpy', 'transforms3d']
+    install_requires=['numpy', 'transforms3d', "aiofiles"]
 )

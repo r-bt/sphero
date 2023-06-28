@@ -6,6 +6,7 @@ from typing import NamedTuple, Callable
 from spherov2.controls.v1 import Packet as PacketV1
 from spherov2.controls.v2 import Packet as PacketV2
 from spherov2.types import ToyType
+import pdb
 
 
 class ToySensor(NamedTuple):
@@ -35,7 +36,7 @@ class Toy:
         self.__adapter = None
         self.__adapter_cls = adapter_cls
         self._packet_manager = self._packet.Manager()
-        self.__decoder = self._packet.Collector(self.__new_packet)
+        self.__decoder = self._packet.Collector(self.__new_packet, self.name)
         self.__waiting = defaultdict(asyncio.Queue)
         self.__listeners = defaultdict(dict)
         self._sensor_controller = None
@@ -48,8 +49,12 @@ class Toy:
     async def __aenter__(self):
         if self.__adapter is not None:
             raise RuntimeError('Toy already in context manager')
-        self.__adapter = self.__adapter_cls(self.ble_device)
-        await self.__adapter.connect()
+        self.__adapter = self.__adapter_cls(self.ble_device,timeout=5.0)
+        try:
+            await self.__adapter.connect(timeout=5.0)
+        except Exception as e:
+            self.__adapter = None
+            raise e
         asyncio.ensure_future(self.__process_packet())
         try:
             for uuid, data in self._handshake:
@@ -62,7 +67,7 @@ class Toy:
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        print("Exiting from Toy Context Manager")
+        # pdb.set_trace()
         self.__packet_queue.put_nowait(None)
         await self.__packet_queue.join()
         await self.__adapter.disconnect()
@@ -96,10 +101,14 @@ class Toy:
         self.__packet_queue.put_nowait(packet.build())
         return await self._wait_packet(packet.id)
 
-    async def _wait_packet(self, key, timeout=10.0, check_error=False):
+    async def _wait_packet(self, key, timeout=5.0, check_error=False):
         future = asyncio.futures.Future()
         await self.__waiting[key].put(future)
-        packet = await asyncio.wait_for(future, timeout)
+        try:
+            packet = await asyncio.wait_for(future, timeout)
+        except TimeoutError:
+            print("_wait_packet timeout error")
+            return None
         if check_error:
             if packet.error != PacketV2.Error.success:
                 raise Exception(packet.error)
@@ -113,7 +122,16 @@ class Toy:
     def _remove_listener(self, key, listener: Callable):
         self.__listeners[key[0]].pop(listener)
 
-    def __api_read(self, char, data):
+    def __api_read(self, char, data: bytearray):
+        """
+        Callback for bleak
+
+        :param char - characteristic 
+        :param data - bytearray of the recieved data
+        """
+        with open("{name}.txt".format(name=self.name), "a") as file:
+            file.write(','.join(format(x, '02x') for x in data))
+            file.write("\n")
         self.__decoder.add(data)
 
     async def __new_packet(self, packet):
