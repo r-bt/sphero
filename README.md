@@ -1,32 +1,24 @@
-# spherov2.py
+# Sphero
 
-![status](https://img.shields.io/pypi/status/spherov2?style=for-the-badge) ![python version](https://img.shields.io/pypi/pyversions/spherov2?style=for-the-badge) [![pypi](https://img.shields.io/pypi/v/spherov2?style=for-the-badge)](https://pypi.org/project/spherov2/) [![docs](https://img.shields.io/readthedocs/spherov2?style=for-the-badge)](https://spherov2.readthedocs.io/en/latest/) [![license](https://img.shields.io/pypi/l/spherov2?style=for-the-badge)](LICENSE) ![last commit](https://img.shields.io/github/last-commit/artificial-intelligence-class/spherov2.py?style=for-the-badge)
+![Read the Docs](https://img.shields.io/readthedocs/sphero?style=for-the-badge) ![GitHub last commit](https://img.shields.io/github/last-commit/r-bt/sphero?style=for-the-badge) [![All Contributors](https://img.shields.io/github/all-contributors/r-bt/sphero?color=ee8449&style=for-the-badge)](#contributors)
 
-An unofficial Python library for [Sphero](https://sphero.com/) toys that supports its Version 2 Bluetooth low energy API described [here](https://sdk.sphero.com/docs/api_spec/general_api/). Toys that are supported includes (implemented ones are checked):
+Sphero is a python library for controlling [Sphero](https://sphero.com/) toys. It implements the Sphero Version 2 [BLE API](https://sdk.sphero.com/docs/api_spec/general_api/) and utilizes python's new `asyncio` features to provide idiomatic ways of discovering, controlling and reading data from a variety of Sphero toys.
 
-- [x] Sphero 2.0 / SPRK
-- [x] Sphero Ollie
-- [x] Sphero BB-8
-- [x] Sphero BB-9E
-- [x] Sphero R2-D2 / R2-Q5
-- [x] Sphero BOLT (In Progress)
-- [x] Sphero SPRK+ / SPRK 2.0
-- [x] Sphero Mini
-- [x] Sphero RVR
+Sphero is a fork of the wonderful [spherov2 library](https://github.com/artificial-intelligence-class/spherov2.py). It implements an `async` API by centering bleak [bleak](https://github.com/hbldh/bleak) (a BLE library) to provide a performant, cross-platform, and multi-agent API
 
-Current Progress:
-- Found a better way to decompile, fixing a few things like Controls, Command Queueing, and Waiting for responses
-- [ ] Controls
-	- [ ] Animation Control
-	- [ ] Drive Control
-	- [x] LED Control
-	- [ ] Sensor Control
-	- [ ] Stats Control
-	- [ ] Streaming Control
+## Currently supported toys
 
-The logic is written based on reverse-engineering the official [Sphero Edu for Android](https://play.google.com/store/apps/details?id=com.sphero.sprk), with the help from available documentation and other unofficial community-based Sphero libraries like [igbopie/spherov2.js](https://github.com/igbopie/spherov2.js) and [EnotYoyo/pysphero](https://github.com/EnotYoyo/pysphero).
-
-This project uses the [hbldh/bleak](https://github.com/hbldh/bleak) Bluetooth Low Energy library, which works across all platforms.
+| Name                    | Status |
+|-------------------------|--------|
+| Sphero 2.0 / SPRK       |✅      |
+| Sphero Ollie            |✅      |
+| Sphero BB-8             |✅      |
+| Sphero BB-9E            |✅      |
+| Sphero R2-D2 / R2-Q5    |✅      |
+| Sphero BOLT             |✅      |
+| Sphero SPRK+ / SPRK 2.0 |✅      |
+| Sphero Mini             |✅      |
+| Sphero RVR              |✅      |
 
 ## Usage
 
@@ -76,13 +68,30 @@ with SpheroEduAPI(toy) as api:
     api.spin(360, 1)
 ```
 
+## Comparison to other libraries
+
+| Name     | 
+|----------|
+| [SpheroV2](https://github.com/artificial-intelligence-class/spherov2.py) |
+| [SpheroNav](https://github.com/Tordensky/SpheroNav) |
+
 ## Acknowledgments
+
+The logic is written based on reverse-engineering the official [Sphero Edu for Android](https://play.google.com/store/apps/details?id=com.sphero.sprk), with the help from available documentation and other unofficial community-based Sphero libraries like [igbopie/spherov2.js](https://github.com/igbopie/spherov2.js) and [EnotYoyo/pysphero](https://github.com/EnotYoyo/pysphero).
+
+This project uses the [hbldh/bleak](https://github.com/hbldh/bleak) Bluetooth Low Energy library, which works across all platforms.
 
 This library is made for educational purposes.  It is used by students in [CIS 521 - Artificial Intelligence](http://artificial-intelligence-class.org/) at the University of Pennsylvania, where we use Sphero robots to help teach the foundations of AI.
 
 It is published as an open-source library under the [MIT License](LICENSE).
 
-## Authors
+## Contributors
 
-* **Hanbang Wang** - [https://www.cis.upenn.edu/~hanbangw/](https://www.cis.upenn.edu/~hanbangw/)
-* **Elionardo Feliciano**
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
